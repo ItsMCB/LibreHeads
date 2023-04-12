@@ -1,6 +1,6 @@
 <p align="center">
   <br/>
-  <a href="https://github.com/ItsMCB/LibreHeads">LibreHeads</a> is a free and open source Minecraft skull database selector. We uniquely offer an open repository of skull textures that can be used in your project.
+  <a href="https://github.com/ItsMCB/LibreHeads">LibreHeads</a> is a free and open source Minecraft skull database selector. We uniquely offer an open repository of skull textures that can be used in other projects.
   <br/>
 </p>
 

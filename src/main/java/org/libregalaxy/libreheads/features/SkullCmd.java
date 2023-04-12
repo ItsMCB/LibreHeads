@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.libregalaxy.libreheads.LibreHead;
 import org.libregalaxy.libreheads.LibreHeads;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class SkullCmd extends CustomCommand {
@@ -20,63 +21,41 @@ public class SkullCmd extends CustomCommand {
         this.instance = instance;
     }
 
+    private DecimalFormat df = new DecimalFormat("###,###");
+
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
-        // TODO include demo in menu?
+
         if (args.length > 0) {
             CMDHelper cmdHelper = new CMDHelper(args);
             String search = cmdHelper.getStringOfArgsAfterIndex(-1);
             List<LibreHead> headResults = instance.getHeads().stream().filter(head -> head.getName().toLowerCase().contains(search.toLowerCase())).toList();
 
-            MenuV2 resultsMenu = new PaginatedMenu("Search Results: "+search + " ("+headResults.size()+")",36, player);
-            addHeadsToMenu(headResults, resultsMenu, player);
-
+            MenuV2 resultsMenu = generateMenu(headResults, "Search Results: "+search, player);
             instance.getMenuManager().open(resultsMenu, player);
             return;
         }
 
-        MenuV2 alphabet = new PaginatedMenu("Alphabet", 36, player);
-        List<LibreHead> alphabetHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ALPHABET)).toList();
-        addHeadsToMenu(alphabetHeads,alphabet,player);
+        MenuV2 alphabet = generateMenu(instance.getAlphabetHeads(), LibreHead.CATEGORY.ALPHABET.name(), player);
 
-        MenuV2 animals = new PaginatedMenu("Animals", 36, player);
-        List<LibreHead> animalHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ANIMALS)).toList();
-        addHeadsToMenu(animalHeads,animals,player);
+        MenuV2 animals = generateMenu(instance.getAnimalHeads(), LibreHead.CATEGORY.ANIMALS.name(), player);
 
-        MenuV2 blocks = new PaginatedMenu("Blocks", 36, player);
-        List<LibreHead> blockHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.BLOCKS)).toList();
-        addHeadsToMenu(blockHeads,blocks,player);
+        MenuV2 blocks = generateMenu(instance.getBlockHeads(), LibreHead.CATEGORY.BLOCKS.name(), player);
 
-        MenuV2 decoration = new PaginatedMenu("Decoration", 36, player);
-        List<LibreHead> decorationHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.DECORATION)).toList();
-        addHeadsToMenu(decorationHeads,decoration,player);
+        MenuV2 decoration = generateMenu(instance.getDecorationHeads(), LibreHead.CATEGORY.DECORATION.name(), player);
 
-        MenuV2 foodDrink = new PaginatedMenu("Food & Drink", 36, player);
-        List<LibreHead> foodDrinkHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.FOOD_DRINKS)).toList();
-        addHeadsToMenu(foodDrinkHeads,foodDrink,player);
+        MenuV2 foodDrink = generateMenu(instance.getFoodDrinkHeads(), LibreHead.CATEGORY.FOOD_DRINKS.name(), player);
 
-        MenuV2 humans = new PaginatedMenu("Humans", 36, player);
-        List<LibreHead> humanHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANS)).toList();
-        addHeadsToMenu(humanHeads,humans,player);
+        MenuV2 humans = generateMenu(instance.getHumanHeads(), LibreHead.CATEGORY.HUMANS.name(), player);
 
-        MenuV2 humanoids = new PaginatedMenu("Humanoids", 36, player);
-        List<LibreHead> humanoidHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANOID)).toList();
-        addHeadsToMenu(humanoidHeads,humanoids,player);
+        MenuV2 humanoids = generateMenu(instance.getHumanoidHeads(), LibreHead.CATEGORY.HUMANOID.name(), player);
 
-        MenuV2 misc = new PaginatedMenu("Miscellaneous", 36, player);
-        List<LibreHead> miscHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MISCELLANEOUS)).toList();
-        addHeadsToMenu(miscHeads,misc,player);
+        MenuV2 miscellaneous = generateMenu(instance.getMiscellaneousHeads(), LibreHead.CATEGORY.MISCELLANEOUS.name(), player);
 
-        MenuV2 monsters = new PaginatedMenu("Monsters", 36, player);
-        List<LibreHead> monsterHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MONSTERS)).toList();
-        addHeadsToMenu(monsterHeads,monsters,player);
+        MenuV2 monsters = generateMenu(instance.getMonsterHeads(), LibreHead.CATEGORY.MONSTERS.name(), player);
 
-        MenuV2 plants = new PaginatedMenu("Plants", 36, player);
-        List<LibreHead> plantHeads = instance.getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.PLANTS)).toList();
-        addHeadsToMenu(plantHeads,plants,player);
-
-
+        MenuV2 plants = generateMenu(instance.getPlantHeads(), LibreHead.CATEGORY.PLANTS.name(), player);
         // Main Menu
         String oakWoodA = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTY3ZDgxM2FlN2ZmZTViZTk1MWE0ZjQxZjJhYTYxOWE1ZTM4OTRlODVlYTVkNDk4NmY4NDk0OWM2M2Q3NjcyZSJ9fX0";
         String cow = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGQ0ZWY3OTM4ZGZkYzg3Yzk4OWNhNWQ5MjMxZTIzZDFlMzY4ZDIxZjgxMDBmODI3MzE2ZDcwZTU0MWY0ZDMxNSJ9fX0";
@@ -88,40 +67,19 @@ public class SkullCmd extends CustomCommand {
         String emoji = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGU0ZTk5NGVhY2Y5MGI2MGVlODdiMTBjNTBhY2I4MGRkMWRhZjllZTZmMmM2M2E3OWIwMTE1NGIxNmRjZjBjZiJ9fX0";
         String zombie = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjZmMTViOWNkYWE4MzQyZWY0ZDlkNjRkNzc2NzlhNTkyYTIwYzVlMTNlMTg3NTVhN2E0M2EzNTI2NzdmZDA3MSJ9fX0";
         String plant = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjVmYjQyM2EwZjg5Nzc3YTVhNTNjYTJkZDJhOTZmYzMwMjMxMzgwNzA0M2ZkMjliMGUwODQ1YTM3NzA1Yzg5OCJ9fX0";
-        int totalHeads = alphabetHeads.size()+animalHeads.size()+blockHeads.size()+decorationHeads.size()+foodDrinkHeads.size()+humanHeads.size()+humanoidHeads.size()+miscHeads.size()+monsterHeads.size()+plantHeads.size();
+        int totalHeads = instance.getAlphabetHeads().size()+instance.getAnimalHeads().size()+instance.getBlockHeads().size()+instance.getDecorationHeads().size()+instance.getDemoHeads().size()+instance.getFoodDrinkHeads().size()+instance.getHumanHeads().size()+instance.getHumanoidHeads().size()+instance.getMiscellaneousHeads().size()+instance.getMonsterHeads().size()+instance.getPlantHeads().size();
 
-        MenuV2 mainMenu = new MenuV2("Head Categories ("+totalHeads+")", InventoryType.CHEST,18)
-                .addItem(new MenuV2Item(new SkullBuilder(oakWoodA).name("&a&lAlphabet").lore("&e&l"+alphabetHeads.size()+" heads")).slot(0).leftClickAction(action -> {
-                    instance.getMenuManager().open(alphabet, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(cow).name("&a&lAnimals").lore("&e&l"+animalHeads.size()+" heads")).slot(1).leftClickAction(action -> {
-                    instance.getMenuManager().open(animals, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(diamondOre).name("&a&lBlocks").lore("&e&l"+blockHeads.size()+" heads")).slot(2).leftClickAction(action -> {
-                    instance.getMenuManager().open(blocks, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(chest).name("&a&lDecoration").lore("&e&l"+decorationHeads.size()+" heads")).slot(3).leftClickAction(action -> {
-                    instance.getMenuManager().open(decoration, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(bread).name("&a&lFood & Drink").lore("&e&l"+foodDrinkHeads.size()+" heads")).slot(4).leftClickAction(action -> {
-                    instance.getMenuManager().open(foodDrink, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(person).name("&a&lHumans").lore("&e&l"+humanHeads.size()+" heads")).slot(5).leftClickAction(action -> {
-                    instance.getMenuManager().open(humans, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(villager).name("&a&lHumanoid").lore("&e&l"+humanoidHeads.size()+" heads")).slot(6).leftClickAction(action -> {
-                    instance.getMenuManager().open(humanoids, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(emoji).name("&a&lMiscellaneous").lore("&e&l"+miscHeads.size()+" heads")).slot(7).leftClickAction(action -> {
-                    instance.getMenuManager().open(misc, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(zombie).name("&a&lMonsters").lore("&e&l"+monsterHeads.size()+" heads")).slot(8).leftClickAction(action -> {
-                    instance.getMenuManager().open(monsters, player);
-                }))
-                .addItem(new MenuV2Item(new SkullBuilder(plant).name("&a&lPlants").lore("&e&l"+plantHeads.size()+" heads")).slot(9).leftClickAction(action -> {
-                    instance.getMenuManager().open(plants, player);
-                }))
-                ;
+        MenuV2 mainMenu = new MenuV2("Head Categories ("+df.format(totalHeads)+")", InventoryType.CHEST,18);
+        addCategory(mainMenu, alphabet, oakWoodA, LibreHead.CATEGORY.ALPHABET, instance.getAlphabetHeads().size(), 2, player);
+        addCategory(mainMenu, animals, cow, LibreHead.CATEGORY.ANIMALS, instance.getAnimalHeads().size(), 3, player);
+        addCategory(mainMenu, blocks, diamondOre, LibreHead.CATEGORY.BLOCKS, instance.getBlockHeads().size(), 4, player);
+        addCategory(mainMenu, decoration, chest, LibreHead.CATEGORY.DECORATION, instance.getDecorationHeads().size(), 5, player);
+        addCategory(mainMenu, foodDrink, bread, LibreHead.CATEGORY.FOOD_DRINKS, instance.getFoodDrinkHeads().size(), 6, player);
+        addCategory(mainMenu, humans, person, LibreHead.CATEGORY.HUMANS, instance.getHumanHeads().size(), 11, player);
+        addCategory(mainMenu, humanoids, villager, LibreHead.CATEGORY.HUMANOID, instance.getHumanoidHeads().size(), 12, player);
+        addCategory(mainMenu, miscellaneous, emoji, LibreHead.CATEGORY.MISCELLANEOUS, instance.getMiscellaneousHeads().size(), 13, player);
+        addCategory(mainMenu, monsters, zombie, LibreHead.CATEGORY.MONSTERS, instance.getMonsterHeads().size(), 14, player);
+        addCategory(mainMenu, plants, plant, LibreHead.CATEGORY.PLANTS, instance.getPlantHeads().size(), 15, player);
         instance.getMenuManager().open(mainMenu, player);
 
     }
@@ -134,6 +92,19 @@ public class SkullCmd extends CustomCommand {
                 player.getInventory().addItem(headBuilder.getCleanItemStack());
             }));
         });
+    }
+
+    public MenuV2 generateMenu(List<LibreHead> heads, String name, Player player) {
+        MenuV2 menu = new PaginatedMenu(name + " ("+df.format(heads.size())+")",36, player);
+        addHeadsToMenu(heads, menu, player);
+        return menu;
+    }
+
+    public void addCategory(MenuV2 menu, MenuV2 openMenu, String skullTexture,LibreHead.CATEGORY category, int size, int slot, Player player) {
+        menu.addItem(new MenuV2Item(new SkullBuilder(skullTexture).name("&d&l"+category.get().getName())
+                .lore("&a"+category.get().getDescription(),"&7"+df.format(size)+" heads")).slot(slot).leftClickAction(action -> {
+            instance.getMenuManager().open(openMenu, player);
+        }));
     }
 
     @Override

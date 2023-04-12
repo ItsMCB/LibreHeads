@@ -5,31 +5,30 @@ import java.util.List;
 public class LibreHead {
 
     public enum CATEGORY {
-        ALPHABET("Alphabet"),
-        ANIMALS("Animals"),
-        BLOCKS("Blocks"),
-        DECORATION("Decoration"),
-        FOOD_DRINKS("Food and Drink"),
-        HUMANS("Humans"),
-        HUMANOID("Humanoid"),
-        MISCELLANEOUS("Miscellaneous"),
-        MONSTERS("Monsters"),
-        PLANTS("Plants"),
-        DEMO("Demo");
+        ALPHABET(new HeadCategory("Alphabet").description("Letters, numbers, etc.")),
+        ANIMALS(new HeadCategory("Animals").description("Real and fake animals and animal characters.")),
+        BLOCKS(new HeadCategory("Blocks").description("Miniature blocks")),
+        DECORATION(new HeadCategory("Decoration").description("Furniture items, props, etc.")),
+        FOOD_DRINKS(new HeadCategory("Food and Drink").description("Food and drinks")),
+        HUMANS(new HeadCategory("Humans").description("Real and fake human characters")),
+        HUMANOID(new HeadCategory("Humanoid").description("Human-like characters")),
+        MISCELLANEOUS(new HeadCategory("Miscellaneous").description("A variety of various things.")),
+        MONSTERS(new HeadCategory("Monsters").description("Aliens, ghosts, and many more creatures.")),
+        PLANTS(new HeadCategory("Plants").description("Shrubbery, fruit, vegetables, etc."));
 
-        private String categorty;
+        private HeadCategory categorty;
 
-        CATEGORY(String elementState) {
-            this.categorty = elementState;
+        CATEGORY(HeadCategory category) {
+            this.categorty = category;
         }
 
-        public String get() {
+        public HeadCategory get() {
             return categorty;
         }
 
         @Override
         public String toString() {
-            return String.valueOf(get());
+            return String.valueOf(get().getName());
         }
     }
 
