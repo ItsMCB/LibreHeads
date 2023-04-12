@@ -36,19 +36,19 @@ public final class LibreHeads extends JavaPlugin {
     @Override
     public void onEnable() {
         // Load HDB Heads
-        loadHeadsDatabaseFile("alphabet", LibreHead.CATEGORY.ALPHABET, true);
-        loadHeadsDatabaseFile("animals", LibreHead.CATEGORY.ANIMALS, true);
-        loadHeadsDatabaseFile("blocks", LibreHead.CATEGORY.BLOCKS, true);
-        loadHeadsDatabaseFile("decoration", LibreHead.CATEGORY.DECORATION, true);
-        loadHeadsDatabaseFile("food-drinks", LibreHead.CATEGORY.FOOD_DRINKS, true);
-        loadHeadsDatabaseFile("humans", LibreHead.CATEGORY.HUMANS, true);
-        loadHeadsDatabaseFile("humanoid", LibreHead.CATEGORY.HUMANOID, true);
-        loadHeadsDatabaseFile("miscellaneous", LibreHead.CATEGORY.MISCELLANEOUS, true);
-        loadHeadsDatabaseFile("monsters", LibreHead.CATEGORY.MONSTERS, true);
-        loadHeadsDatabaseFile("plants", LibreHead.CATEGORY.PLANTS, true);
+        loadHeadsDatabaseFile("alphabet", LibreHead.CATEGORY.ALPHABET, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("animals", LibreHead.CATEGORY.ANIMALS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("blocks", LibreHead.CATEGORY.BLOCKS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("decoration", LibreHead.CATEGORY.DECORATION, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("food-drinks", LibreHead.CATEGORY.FOOD_DRINKS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("humans", LibreHead.CATEGORY.HUMANS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("humanoid", LibreHead.CATEGORY.HUMANOID, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("miscellaneous", LibreHead.CATEGORY.MISCELLANEOUS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("monsters", LibreHead.CATEGORY.MONSTERS, LibreHead.DATABASE.HEADDATABASE);
+        loadHeadsDatabaseFile("plants", LibreHead.CATEGORY.PLANTS, LibreHead.DATABASE.HEADDATABASE);
 
         // Load LibreHeads Heads
-        loadHeadsDatabaseFile("demo", LibreHead.CATEGORY.DEMO, false);
+        loadHeadsDatabaseFile("demo", LibreHead.CATEGORY.DEMO, LibreHead.DATABASE.LIBREHEADS);
 
         this.menuManager = new MenuV2Manager(this);
         // Register features
@@ -57,10 +57,10 @@ public final class LibreHeads extends JavaPlugin {
         bukkitFeatureManager.reload();
     }
 
-    private void loadHeadsDatabaseFile(String fileName, LibreHead.CATEGORY category, boolean isHDB) {
+    private void loadHeadsDatabaseFile(String fileName, LibreHead.CATEGORY category, LibreHead.DATABASE database) {
         try {
             String resource = "";
-            if (isHDB) {
+            if (database.equals(LibreHead.DATABASE.HEADDATABASE)) {
                 resource = "hdb_frozen"+ File.separator;
             }
             String headsJSON = IOUtil.toString(getResource(resource+fileName+".json"));
@@ -69,32 +69,10 @@ public final class LibreHeads extends JavaPlugin {
             for (JsonNode element : root) {
                 String name = element.get("name").asText();
                 String value = element.get("value").asText();
-                heads.add(new LibreHead(name, value).category(category));
+                heads.add(new LibreHead(name,value).category(category).database(database));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void loadLibreHeadsHeadsExperiment() {
-        try {
-            String headsJSON = IOUtil.toString(getResource("heads.json"));
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(headsJSON);
-            JsonNode categoriesNode = root.get("categories");
-            if (categoriesNode != null) {
-                JsonNode alphabetNode = categoriesNode.get("alphabet");
-                if (alphabetNode != null && alphabetNode.isArray()) {
-                    for (JsonNode elementNode : alphabetNode) {
-                        String name = elementNode.get("name").asText();
-                        String value = elementNode.get("value").asText();
-                        JsonNode tagsNode = elementNode.get("tags");
-                        heads.add(new LibreHead(name, value, tagsNode.findValuesAsText("")));
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Couldn't find \"" + fileName + "\" in database type \"" + database + "\". Ignoring...");
         }
     }
 

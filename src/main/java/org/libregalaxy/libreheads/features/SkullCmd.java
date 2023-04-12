@@ -23,6 +23,7 @@ public class SkullCmd extends CustomCommand {
 
     @Override
     public void executeAsPlayer(Player player, String[] args) {
+        // TODO include demo in menu?
         if (args.length > 0) {
             CMDHelper cmdHelper = new CMDHelper(args);
             String search = cmdHelper.getStringOfArgsAfterIndex(-1);
@@ -127,7 +128,7 @@ public class SkullCmd extends CustomCommand {
 
     private void addHeadsToMenu(List<LibreHead> heads, MenuV2 menu, Player player) {
         heads.forEach(head -> {
-            ItemBuilder headBuilder = new SkullBuilder(head.getValue()).name("&r&d&l"+head.getName()).lore(new BukkitMsgBuilder(head.getCategory().toString()).get());
+            ItemBuilder headBuilder = new SkullBuilder(head.getValue()).name("&r&d&l"+head.getName()).lore(new BukkitMsgBuilder("&a"+head.getCategory().toString()).get(), new BukkitMsgBuilder("&7"+head.getDatabase().toString()).get());
 
             menu.addItem(new MenuV2Item(headBuilder).leftClickAction(event -> {
                 player.getInventory().addItem(headBuilder.getCleanItemStack());
