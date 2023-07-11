@@ -10,6 +10,7 @@ import org.libregalaxy.libreheads.features.SkullFeat;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,74 +30,67 @@ public final class LibreHeads extends JavaPlugin {
 
     private List<LibreHead> heads = new ArrayList<>();
 
+    private DecimalFormat df = new DecimalFormat("###,###");
+
+    public DecimalFormat getDF() {
+        return df;
+    }
+
     public List<LibreHead> getHeads() {
         return heads;
     }
 
-    List<LibreHead> alphabetHeads = new ArrayList<>();
-
     public List<LibreHead> getAlphabetHeads() {
-        return alphabetHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ALPHABET)).toList();
     }
-
-    List<LibreHead> animalHeads = new ArrayList<>();
 
     public List<LibreHead> getAnimalHeads() {
-        return animalHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ANIMALS)).toList();
     }
 
-    List<LibreHead> blockHeads = new ArrayList<>();
 
     public List<LibreHead> getBlockHeads() {
-        return blockHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.BLOCKS)).toList();
     }
 
-    List<LibreHead> decorationHeads = new ArrayList<>();
 
     public List<LibreHead> getDecorationHeads() {
-        return decorationHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.DECORATION)).toList();
     }
 
-    List<LibreHead> foodDrinkHeads = new ArrayList<>();
 
     public List<LibreHead> getFoodDrinkHeads() {
-        return foodDrinkHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.FOOD_DRINKS)).toList();
     }
 
-    List<LibreHead> humanHeads = new ArrayList<>();
 
     public List<LibreHead> getHumanHeads() {
-        return humanHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANS)).toList();
     }
 
-    List<LibreHead> humanoidHeads = new ArrayList<>();
 
     public List<LibreHead> getHumanoidHeads() {
-        return humanoidHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANOID)).toList();
     }
 
-    List<LibreHead> miscellaneousHeads = new ArrayList<>();
 
     public List<LibreHead> getMiscellaneousHeads() {
-        return miscellaneousHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MISCELLANEOUS)).toList();
     }
 
-    List<LibreHead> monsterHeads = new ArrayList<>();
 
     public List<LibreHead> getMonsterHeads() {
-        return monsterHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MONSTERS)).toList();
     }
 
-    List<LibreHead> plantHeads = new ArrayList<>();
 
     public List<LibreHead> getPlantHeads() {
-        return plantHeads;
+        return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.PLANTS)).toList();
     }
 
-    List<LibreHead> demoHeads = new ArrayList<>();
 
     public List<LibreHead> getDemoHeads() {
-        return demoHeads;
+        return List.of();
     }
 
     @Override
@@ -116,25 +110,14 @@ public final class LibreHeads extends JavaPlugin {
         // Load LibreHeads Heads
         loadHeadsDatabaseFile("miscellaneous", LibreHead.CATEGORY.MISCELLANEOUS, LibreHead.DATABASE.LIBREHEADS);
 
-        // Cache heads
-        alphabetHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ALPHABET)).toList();
-        animalHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ANIMALS)).toList();
-        blockHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.BLOCKS)).toList();
-        decorationHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.DECORATION)).toList();
-        foodDrinkHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.FOOD_DRINKS)).toList();
-        humanHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANS)).toList();
-        humanoidHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANOID)).toList();
-        miscellaneousHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MISCELLANEOUS)).toList();
-        monsterHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MONSTERS)).toList();
-        plantHeads = getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.PLANTS)).toList();
-
-
         this.menuManager = new MenuV2Manager(this);
         // Register features
         this.bukkitFeatureManager = new BukkitFeatureManager();
         bukkitFeatureManager.register(new SkullFeat(this));
         bukkitFeatureManager.reload();
     }
+
+
 
     private void loadHeadsDatabaseFile(String fileName, LibreHead.CATEGORY category, LibreHead.DATABASE database) {
         try {

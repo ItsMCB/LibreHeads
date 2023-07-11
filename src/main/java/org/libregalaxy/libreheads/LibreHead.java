@@ -1,5 +1,9 @@
 package org.libregalaxy.libreheads;
 
+import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
+import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
+import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+
 import java.util.List;
 
 public class LibreHead {
@@ -58,8 +62,8 @@ public class LibreHead {
     private String value;
     private List<String> tags;
     private CATEGORY category;
-
     private DATABASE database = DATABASE.UNKNOWN;
+    private MenuV2Item item;
 
     // empty constructor for Jackson deserialization
     public LibreHead() {}
@@ -67,21 +71,28 @@ public class LibreHead {
     public LibreHead(String name, String value) {
         this.name = name;
         this.value = value;
+        this.item = new SkullBuilder(value)
+                .name("&r&d&l"+getName());
     }
 
     public LibreHead(String name, String value, List<String> tags) {
-        this.name = name;
-        this.value = value;
+        this(name, value);
         this.tags = tags;
+    }
+
+    public MenuV2Item getItem() {
+        return item;
     }
 
     public LibreHead category(CATEGORY category) {
         this.category = category;
+        this.item.lore(new BukkitMsgBuilder("&a"+getCategory().toString()).get());
         return this;
     }
 
     public LibreHead database(DATABASE database) {
         this.database = database;
+        this.item.lore(new BukkitMsgBuilder("&7"+getDatabase().toString()).get());
         return this;
     }
 
