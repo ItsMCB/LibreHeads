@@ -9,15 +9,15 @@ import java.util.List;
 public class LibreHead {
 
     public enum CATEGORY {
-        ALPHABET(new HeadCategory("Alphabet").description("Letters, numbers, etc.")),
-        ANIMALS(new HeadCategory("Animals").description("Real and fake animals and animal characters.")),
-        BLOCKS(new HeadCategory("Blocks").description("Miniature blocks")),
+        ALPHABET(new HeadCategory("Alphabet").description("Letters, numbers, and special characters.")),
+        ANIMALS(new HeadCategory("Animals").description("Real and fictional animals and animal characters.")),
+        BLOCKS(new HeadCategory("Blocks").description("Miniature blocks.")),
         DECORATION(new HeadCategory("Decoration").description("Furniture items, props, etc.")),
-        FOOD_DRINKS(new HeadCategory("Food and Drink").description("Food and drinks")),
-        HUMANS(new HeadCategory("Humans").description("Real and fake human characters")),
-        HUMANOID(new HeadCategory("Humanoid").description("Human-like characters")),
+        FOOD_DRINKS(new HeadCategory("Food and Drink").description("Food and drinks.")),
+        HUMANS(new HeadCategory("Humans").description("Real and fictional human characters.")),
+        HUMANOID(new HeadCategory("Humanoid").description("Human-like characters.")),
         MISCELLANEOUS(new HeadCategory("Miscellaneous").description("A variety of various things.")),
-        MONSTERS(new HeadCategory("Monsters").description("Aliens, ghosts, and many more creatures.")),
+        MONSTERS(new HeadCategory("Monsters").description("Aliens, ghosts, and other creatures.")),
         PLANTS(new HeadCategory("Plants").description("Shrubbery, fruit, vegetables, etc."));
 
         private HeadCategory categorty;
@@ -86,13 +86,13 @@ public class LibreHead {
 
     public LibreHead category(CATEGORY category) {
         this.category = category;
-        this.item.lore(new BukkitMsgBuilder("&a"+getCategory().toString()).get());
+        this.item.addLore(new BukkitMsgBuilder("&a"+getCategory().toString()).get());
         return this;
     }
 
     public LibreHead database(DATABASE database) {
         this.database = database;
-        this.item.lore(new BukkitMsgBuilder("&7"+getDatabase().toString()).get());
+        this.item.addLore(new BukkitMsgBuilder("&7"+getDatabase().toString()).get());
         return this;
     }
 
