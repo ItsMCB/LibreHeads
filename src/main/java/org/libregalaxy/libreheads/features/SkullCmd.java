@@ -36,9 +36,7 @@ public class SkullCmd extends CustomCommand {
         if (args.length > 0) {
             CMDHelper cmdHelper = new CMDHelper(args);
             String search = cmdHelper.getStringOfArgsAfterIndex(-1);
-            List<LibreHead> headResults = instance.getHeads().stream().filter(head -> head.getName().toLowerCase().contains(search.toLowerCase())).toList();
-            MenuV2 resultsMenu = generateMenu(headResults, null,"Search Results: "+search, player);
-            instance.getMenuManager().open(resultsMenu, player);
+            instance.getMenuManager().open(skullSearch(search,player,null), player);
             return;
         }
 
@@ -54,12 +52,14 @@ public class SkullCmd extends CustomCommand {
         addCategory(mainMenu, StaticMenuHeadTextures.Zombie.getTexture(), LibreHead.CATEGORY.MONSTERS, instance.getMonsterHeads().size(), 14, player);
         addCategory(mainMenu, StaticMenuHeadTextures.Plant.getTexture(), LibreHead.CATEGORY.PLANTS, instance.getPlantHeads().size(), 15, player);
 
-        mainMenu.addItem(new SkullBuilder(Bukkit.getOfflinePlayer("MHF_Cake")).slot(21).name("&d&lMHF").clickAction(e -> instance.getMenuManager().open(openMHF(player),player,mainMenu)));
-        mainMenu.addItem(new SkullBuilder(player).slot(22).name("&d&lOnline Players").clickAction(e -> instance.getMenuManager().open(openOnline(player),player,mainMenu)));
-        mainMenu.addItem(new SkullBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=").slot(23).name("&d&lGet By Username").addLore("&7Click this then type in chat a Minecraft username").clickAction(e -> {
+        mainMenu.addItem(new SkullBuilder(Bukkit.getOfflinePlayer("MHF_Cake")).slot(20).name("&d&lMHF").clickAction(e -> instance.getMenuManager().open(openMHF(player),player,mainMenu)));
+        mainMenu.addItem(new SkullBuilder(player).slot(21).name("&d&lOnline Players").clickAction(e -> instance.getMenuManager().open(openOnline(player),player,mainMenu)));
+
+        mainMenu.addItem(new SkullBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=")
+                .slot(23).name("&d&lGet By Username").addLore("&7Obtain player head","&7Click this then type in chat a Minecraft username").clickAction(e -> {
             ConversationFactory conversationFactory = new ConversationFactory(instance);
             Conversation c = conversationFactory
-                    .withFirstPrompt(new SkullSearchPrompt())
+                    .withFirstPrompt(new ValidPlayerSearchPrompt())
                     .withEscapeSequence("exit")
                     .withTimeout(60)
                     .withPrefix(new InputPrefix())
@@ -69,8 +69,28 @@ public class SkullCmd extends CustomCommand {
             c.begin();
         }));
 
+        mainMenu.addItem(new SkullBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=")
+                .slot(24).name("&d&lSearch Skull Database").addLore("&7Click this then type a skull name in chat","&7(Doesn't include online players)").clickAction(e -> {
+            ConversationFactory conversationFactory = new ConversationFactory(instance);
+            Conversation c = conversationFactory
+                    .withFirstPrompt(new SkullSearchPrompt())
+                    .withEscapeSequence("exit")
+                    .withTimeout(60)
+                    .withPrefix(new InputPrefix())
+                    .withLocalEcho(false)
+                    .buildConversation(player);
+            c.getContext().setSessionData("lh",instance);
+            c.getContext().setSessionData("pm",mainMenu);
+            c.begin();
+        }));
+
         instance.getMenuManager().open(mainMenu, player);
 
+    }
+
+    public MenuV2 skullSearch(String query, Player player, MenuV2 previousMenu) {
+        List<LibreHead> headResults = instance.getHeads().stream().filter(head -> head.getName().toLowerCase().contains(query.toLowerCase())).toList();
+        return generateMenu(headResults, null,"Search Results: "+query, player).setPreviousMenu(previousMenu);
     }
 
     public MenuV2Item getGetterSkull(MenuV2Item i, String skullName, Player player) {
