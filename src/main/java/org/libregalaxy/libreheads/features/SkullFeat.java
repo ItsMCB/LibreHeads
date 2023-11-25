@@ -7,6 +7,7 @@ public class SkullFeat extends BukkitFeature {
 
     public SkullFeat(LibreHeads instance) {
         super("skull","Get a skull",null, instance);
-        registerCommand(new SkullCmd(instance));
+        registerCommand(new SkullCmd(instance, "head"));
+        registerCommand(new SkullCmd(instance, "skull"));
     }
 }

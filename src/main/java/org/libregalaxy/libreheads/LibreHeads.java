@@ -3,6 +3,7 @@ package org.libregalaxy.libreheads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
+import me.itsmcb.vexelcore.bukkit.api.managers.CacheManager;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codehaus.plexus.util.IOUtil;
@@ -26,6 +27,11 @@ public final class LibreHeads extends JavaPlugin {
 
     public BukkitFeatureManager getBukkitFeatureManager() {
         return bukkitFeatureManager;
+    }
+    public CacheManager cacheManager;
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 
     private List<LibreHead> heads = new ArrayList<>();
@@ -111,6 +117,7 @@ public final class LibreHeads extends JavaPlugin {
         loadHeadsDatabaseFile("miscellaneous", LibreHead.CATEGORY.MISCELLANEOUS, LibreHead.DATABASE.LIBREHEADS);
 
         this.menuManager = new MenuV2Manager(this);
+        this.cacheManager = new CacheManager(this);
         // Register features
         this.bukkitFeatureManager = new BukkitFeatureManager();
         bukkitFeatureManager.register(new SkullFeat(this));
