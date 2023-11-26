@@ -19,8 +19,8 @@ public class ValidPlayerSearchPrompt extends ValidatingPrompt {
     }
 
     @Override
-    protected boolean isInputValid(@NotNull ConversationContext context, @NotNull String input) {
-        return PlayerUtils.isValid(input);
+    protected boolean isInputValid(@NotNull ConversationContext c, @NotNull String input) {
+        return PlayerUtils.isValid(input,((LibreHeads) c.getSessionData("lh")).getCacheManager());
     }
 
     @Override

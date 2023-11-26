@@ -51,8 +51,7 @@ public class SkullCmd extends CustomCommand {
         addCategory(mainMenu, StaticMenuHeadTextures.Emoji.getTexture(), LibreHead.CATEGORY.MISCELLANEOUS, instance.getMiscellaneousHeads().size(), 13, player);
         addCategory(mainMenu, StaticMenuHeadTextures.Zombie.getTexture(), LibreHead.CATEGORY.MONSTERS, instance.getMonsterHeads().size(), 14, player);
         addCategory(mainMenu, StaticMenuHeadTextures.Plant.getTexture(), LibreHead.CATEGORY.PLANTS, instance.getPlantHeads().size(), 15, player);
-
-        mainMenu.addItem(new SkullBuilder(Bukkit.getOfflinePlayer("MHF_Cake")).slot(20).name("&d&lMHF").clickAction(e -> instance.getMenuManager().open(openMHF(player),player,mainMenu)));
+        mainMenu.addItem(new SkullBuilder(instance.getCacheManager().get("MHF_Cake")).slot(20).name("&d&lMHF").clickAction(e -> instance.getMenuManager().open(openMHF(player),player,mainMenu)));
         mainMenu.addItem(new SkullBuilder(player).slot(21).name("&d&lOnline Players").clickAction(e -> instance.getMenuManager().open(openOnline(player),player,mainMenu)));
 
         mainMenu.addItem(new SkullBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=")
