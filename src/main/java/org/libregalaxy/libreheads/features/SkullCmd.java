@@ -7,6 +7,7 @@ import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Item;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.PaginatedMenu;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
+import me.itsmcb.vexelcore.bukkit.api.utils.BukkitUtils;
 import me.itsmcb.vexelcore.bukkit.plugin.CachedPlayer;
 import me.itsmcb.vexelcore.common.api.command.CMDHelper;
 import me.itsmcb.vexelcore.common.api.utils.MojangUtils;
@@ -20,6 +21,7 @@ import org.libregalaxy.libreheads.LibreHead;
 import org.libregalaxy.libreheads.LibreHeads;
 import org.libregalaxy.libreheads.StaticMenuHeadTextures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SkullCmd extends CustomCommand {
@@ -88,7 +90,15 @@ public class SkullCmd extends CustomCommand {
     }
 
     public MenuV2 skullSearch(String query, Player player, MenuV2 previousMenu) {
-        List<LibreHead> headResults = instance.getHeads().stream().filter(head -> head.getName().toLowerCase().contains(query.toLowerCase())).toList();
+        ArrayList<LibreHead> heads = new ArrayList<>(instance.getHeads());
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            heads.add(new LibreHead("&d"+p.getName(),new SkullBuilder(p).getTexture()).database(LibreHead.DATABASE.PLAYER));
+        });
+        if (Bukkit.getPlayer(query) == null) {
+            CachedPlayer cachedPlayer = instance.getCacheManager().get(query);
+            heads.add(new LibreHead("&d"+cachedPlayer.getName(),cachedPlayer.getPlayerSkin().getValue()).database(LibreHead.DATABASE.PLAYER));
+        }
+        ArrayList<LibreHead> headResults = new ArrayList<>(heads.stream().filter(head -> head.getName().toLowerCase().contains(query.toLowerCase())).toList());
         return generateMenu(headResults, null,"Search Results: "+query, player).setPreviousMenu(previousMenu);
     }
 
@@ -163,7 +173,9 @@ public class SkullCmd extends CustomCommand {
 
     @Override
     public List<String> getAdditionalCompletions(CommandSender sender) {
-        return instance.getHeads().stream().map(LibreHead::getName).toList();
+        ArrayList<String> names = new ArrayList<>(instance.getHeads().stream().map(LibreHead::getName).toList());
+        names.addAll(BukkitUtils.getOnlinePlayerNames());
+        return names;
     }
 
 }

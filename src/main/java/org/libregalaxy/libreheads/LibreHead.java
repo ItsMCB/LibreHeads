@@ -36,7 +36,8 @@ public class LibreHead {
 
         UNKNOWN("Unknown Source"),
         LIBREHEADS("LibreHeads"),
-        HEADDATABASE("Head Database");
+        HEADDATABASE("Head Database"),
+        PLAYER("Player");
 
         private String database;
 
