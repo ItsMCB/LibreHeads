@@ -92,11 +92,14 @@ public class SkullCmd extends CustomCommand {
     public MenuV2 skullSearch(String query, Player player, MenuV2 previousMenu) {
         ArrayList<LibreHead> heads = new ArrayList<>(instance.getHeads());
         Bukkit.getOnlinePlayers().forEach(p -> {
-            heads.add(new LibreHead("&d"+p.getName(),new SkullBuilder(p).getTexture()).database(LibreHead.DATABASE.PLAYER));
+            heads.add(new LibreHead("&d&l"+p.getName(),new SkullBuilder(p).getTexture()).database(LibreHead.DATABASE.PLAYER));
         });
-        if (Bukkit.getPlayer(query) == null) {
+        // NOTE: I believe this should be fine for Bedrock players, but we'll see
+        if (Bukkit.getPlayer(query) == null && query.length()<=16 && query.length()>=2) {
             CachedPlayer cachedPlayer = instance.getCacheManager().get(query);
-            heads.add(new LibreHead("&d"+cachedPlayer.getName(),cachedPlayer.getPlayerSkin().getValue()).database(LibreHead.DATABASE.PLAYER));
+            if (cachedPlayer.isComplete()) {
+                heads.add(new LibreHead("&d&l"+cachedPlayer.getName(),cachedPlayer.getPlayerSkin().getValue()).database(LibreHead.DATABASE.PLAYER));
+            }
         }
         ArrayList<LibreHead> headResults = new ArrayList<>(heads.stream().filter(head -> head.getName().toLowerCase().contains(query.toLowerCase())).toList());
         return generateMenu(headResults, null,"Search Results: "+query, player).setPreviousMenu(previousMenu);
