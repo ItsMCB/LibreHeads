@@ -140,7 +140,7 @@ public final class LibreHeads extends JavaPlugin {
                 String value = element.get("value").asText();
                 heads.add(new LibreHead(name,value).category(category).database(database));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Couldn't find \"" + fileName + "\" in database type \"" + database + "\". Ignoring...");
         }
     }
