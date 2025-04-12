@@ -1,11 +1,12 @@
 name: LibreHeads
+description: The ultimate decorative head database
 version: '${version}'
 main: org.libregalaxy.libreheads.LibreHeads
-api-version: 1.19
+api-version: 1.21.3
 author: ItsMCB
 libraries:
-  - com.fasterxml.jackson.core:jackson-core:2.13.0
-  - com.fasterxml.jackson.core:jackson-databind:2.13.0
-  - com.fasterxml.jackson.core:jackson-annotations:2.13.0
+  - com.fasterxml.jackson.core:jackson-core:2.18.3
+  - com.fasterxml.jackson.core:jackson-databind:2.18.3
+  - com.fasterxml.jackson.core:jackson-annotations:2.18.3
 depend:
   - VexelCore

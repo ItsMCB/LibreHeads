@@ -1,16 +1,18 @@
 package org.libregalaxy.libreheads.features;
 
-import me.itsmcb.vexelcore.bukkit.api.menuv2.SkullBuilder;
+import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
+import me.itsmcb.vexelcore.bukkit.api.cache.CachedPlayerV2;
+import me.itsmcb.vexelcore.bukkit.api.cache.exceptions.PlayerNotFoundException;
+import me.itsmcb.vexelcore.bukkit.api.menu.MenuButton;
 import me.itsmcb.vexelcore.bukkit.api.text.BukkitMsgBuilder;
-import me.itsmcb.vexelcore.bukkit.api.utils.PlayerUtils;
-import me.itsmcb.vexelcore.bukkit.plugin.CachedPlayer;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.libregalaxy.libreheads.LibreHeads;
+
+import java.util.concurrent.CompletableFuture;
 
 public class ValidPlayerSearchPrompt extends ValidatingPrompt {
     @Override
@@ -20,21 +22,23 @@ public class ValidPlayerSearchPrompt extends ValidatingPrompt {
 
     @Override
     protected boolean isInputValid(@NotNull ConversationContext c, @NotNull String input) {
-        return PlayerUtils.isValid(input,((LibreHeads) c.getSessionData("lh")).getCacheManager());
+        return VexelCoreBukkitAPI.getCacheManager().isValidUsername(input);
     }
 
     @Override
     protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext c, @NotNull String input) {
         Player player = (Player) c.getForWhom();
-        CachedPlayer cachedPlayer = ((LibreHeads) c.getSessionData("lh")).getCacheManager().get(input);
-        player.getInventory().addItem(
-                new SkullBuilder(cachedPlayer)
-                        .name("&d&l"+cachedPlayer.getName())
-                        .addLore("&7Player Head")
-                        .update()
-                        .getCleanItemStack()
-        );
-        new BukkitMsgBuilder("&7Grabbed &d&l"+input).send(player);
+        CompletableFuture<CachedPlayerV2> cpf = VexelCoreBukkitAPI.getCacheManager().getCachedPlayer(input);
+        cpf.thenAccept(p -> {
+            player.getInventory().addItem(new MenuButton(p).name("&d&l"+p.getUsername()).addLore("&7Player Head").getCleanItemStack());
+            new BukkitMsgBuilder("&7Grabbed &d&l"+input).send(player);
+        });
+        cpf.exceptionally(e -> {
+            if (e instanceof PlayerNotFoundException) {
+                new BukkitMsgBuilder("&cInvalid username: "+input);
+            }
+            return null;
+        });
         return END_OF_CONVERSATION;
     }
 }

@@ -3,40 +3,21 @@ package org.libregalaxy.libreheads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
-import me.itsmcb.vexelcore.bukkit.api.managers.CacheManager;
 import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codehaus.plexus.util.IOUtil;
 import org.libregalaxy.libreheads.features.SkullFeat;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class LibreHeads extends JavaPlugin {
 
-    private BukkitFeatureManager bukkitFeatureManager;
-
-    private MenuV2Manager menuManager;
-
-    public MenuV2Manager getMenuManager() {
-        return menuManager;
-    }
-
-    public BukkitFeatureManager getBukkitFeatureManager() {
-        return bukkitFeatureManager;
-    }
-    public CacheManager cacheManager;
-
-    public CacheManager getCacheManager() {
-        return cacheManager;
-    }
-
     private List<LibreHead> heads = new ArrayList<>();
 
-    private DecimalFormat df = new DecimalFormat("###,###");
+    private final DecimalFormat df = new DecimalFormat("###,###");
 
     public DecimalFormat getDF() {
         return df;
@@ -54,49 +35,36 @@ public final class LibreHeads extends JavaPlugin {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.ANIMALS)).toList();
     }
 
-
     public List<LibreHead> getBlockHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.BLOCKS)).toList();
     }
-
 
     public List<LibreHead> getDecorationHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.DECORATION)).toList();
     }
 
-
     public List<LibreHead> getFoodDrinkHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.FOOD_DRINKS)).toList();
     }
-
 
     public List<LibreHead> getHumanHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANS)).toList();
     }
 
-
     public List<LibreHead> getHumanoidHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.HUMANOID)).toList();
     }
-
 
     public List<LibreHead> getMiscellaneousHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MISCELLANEOUS)).toList();
     }
 
-
     public List<LibreHead> getMonsterHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.MONSTERS)).toList();
     }
 
-
     public List<LibreHead> getPlantHeads() {
         return getHeads().stream().filter(head -> head.getCategory().equals(LibreHead.CATEGORY.PLANTS)).toList();
-    }
-
-
-    public List<LibreHead> getDemoHeads() {
-        return List.of();
     }
 
     @Override
@@ -116,15 +84,11 @@ public final class LibreHeads extends JavaPlugin {
         // Load LibreHeads Heads
         loadHeadsDatabaseFile("miscellaneous", LibreHead.CATEGORY.MISCELLANEOUS, LibreHead.DATABASE.LIBREHEADS);
 
-        this.menuManager = new MenuV2Manager(this);
-        this.cacheManager = new CacheManager(this);
         // Register features
-        this.bukkitFeatureManager = new BukkitFeatureManager();
+        BukkitFeatureManager bukkitFeatureManager = new BukkitFeatureManager();
         bukkitFeatureManager.register(new SkullFeat(this));
         bukkitFeatureManager.reload();
     }
-
-
 
     private void loadHeadsDatabaseFile(String fileName, LibreHead.CATEGORY category, LibreHead.DATABASE database) {
         try {

@@ -1,6 +1,7 @@
 package org.libregalaxy.libreheads.features;
 
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2;
+import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
+import me.itsmcb.vexelcore.bukkit.api.menu.Menu;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -18,9 +19,9 @@ public class SkullSearchPrompt extends StringPrompt {
     @Override
     public @Nullable Prompt acceptInput(@NotNull ConversationContext c, @Nullable String input) {
         LibreHeads instance = (LibreHeads) c.getSessionData("lh");
-        MenuV2 pm = (MenuV2) c.getSessionData("pm");
+        Menu pm = (Menu) c.getSessionData("pm");
         Player player = (Player) c.getForWhom();
-        instance.getMenuManager().open(new SkullCmd(instance,"skull").skullSearch(input,player,pm),player);
+        VexelCoreBukkitAPI.getMenuManager().open(new SkullCmd(instance,"skull").skullSearch(input,pm),player);
         return END_OF_CONVERSATION;
     }
 }

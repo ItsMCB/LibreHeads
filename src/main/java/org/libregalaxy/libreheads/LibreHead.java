@@ -1,5 +1,7 @@
 package org.libregalaxy.libreheads;
 
+import me.itsmcb.vexelcore.bukkit.api.cache.CachedPlayerV2;
+
 import java.util.List;
 
 public class LibreHead {
@@ -37,7 +39,8 @@ public class LibreHead {
         UNKNOWN("Unknown Source"),
         LIBREHEADS("LibreHeads"),
         HEADDATABASE("Head Database"),
-        PLAYER("Player");
+        PLAYER("Player"),
+        ONLINE_PLAYER("Online Player");
 
         private String database;
 
@@ -57,6 +60,7 @@ public class LibreHead {
 
     private String name;
     private String value;
+    private String signature;
     private List<String> tags;
     private CATEGORY category;
     private DATABASE database = DATABASE.UNKNOWN;
@@ -67,6 +71,16 @@ public class LibreHead {
     public LibreHead(String name, String value) {
         this.name = name;
         this.value = value;
+    }
+
+    public LibreHead(String name, String value, String signature) {
+        this.name = name;
+        this.value = value;
+        this.signature = signature;
+    }
+
+    public LibreHead(CachedPlayerV2 p) {
+        this("&d&l"+p.getUsername(),p.getPlayerSkinData().getTexture(),p.getPlayerSkinData().getSignature());
     }
 
     public LibreHead(String name, String value, List<String> tags) {
@@ -90,6 +104,14 @@ public class LibreHead {
 
     public String getValue() {
         return value;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public boolean hasSignature() {
+        return signature != null;
     }
 
     public List<String> getTags() {
