@@ -165,7 +165,7 @@ public class SkullCmd extends CustomCommand {
         PaginatedMenu search = new PaginatedMenu(MenuRowSize.SIX, "Search Results: " + query);
         ArrayList<LibreHead> heads = getAllHeads();
         // Only seek specific player if query could be a username
-        if (CacheManagerV2.isValidUsername(query)) {
+        if (CacheManagerV2.isValidUsernameFormat(query)) {
             CompletableFuture<CachedPlayerV2> cpf = VexelCoreBukkitAPI.getCacheManager().getCachedPlayer(query);
             cpf.thenAccept(p -> {
                 try {

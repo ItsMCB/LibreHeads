@@ -1,6 +1,7 @@
 package org.libregalaxy.libreheads.features;
 
 import me.itsmcb.vexelcore.bukkit.VexelCoreBukkitAPI;
+import me.itsmcb.vexelcore.bukkit.api.cache.CacheManagerV2;
 import me.itsmcb.vexelcore.bukkit.api.cache.CachedPlayerV2;
 import me.itsmcb.vexelcore.bukkit.api.cache.exceptions.PlayerNotFoundException;
 import me.itsmcb.vexelcore.bukkit.api.menu.MenuButton;
@@ -22,7 +23,7 @@ public class ValidPlayerSearchPrompt extends ValidatingPrompt {
 
     @Override
     protected boolean isInputValid(@NotNull ConversationContext c, @NotNull String input) {
-        return VexelCoreBukkitAPI.getCacheManager().isValidUsername(input);
+        return CacheManagerV2.isValidUsernameFormat(input);
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.libregalaxy.libreheads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.itsmcb.vexelcore.bukkit.api.managers.BukkitFeatureManager;
-import me.itsmcb.vexelcore.bukkit.api.menuv2.MenuV2Manager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codehaus.plexus.util.IOUtil;
 import org.libregalaxy.libreheads.features.SkullFeat;
