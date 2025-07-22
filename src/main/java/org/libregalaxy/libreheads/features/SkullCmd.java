@@ -31,7 +31,6 @@ import org.libregalaxy.libreheads.StaticMenuHeadTextures;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class SkullCmd extends CustomCommand {
 
@@ -63,7 +62,7 @@ public class SkullCmd extends CustomCommand {
      * Creates the main menu with all categories and functions (ex. search)
      */
     private Menu createMainMenu(Player player) {
-        Menu menu = new Menu(MenuRowSize.THREE, "Head Categories ("+instance.getDF().format(instance.getHeads().size())+")");
+        PaginatedMenu menu = new PaginatedMenu(MenuRowSize.FOUR, "Head Categories ("+instance.getDF().format(instance.getHeads().size())+")");
 
         // Add all category buttons
         addCategory(menu, StaticMenuHeadTextures.OakWoodA.getTexture(), LibreHead.CATEGORY.ALPHABET, instance.getAlphabetHeads().size(), 2, player);
@@ -80,8 +79,9 @@ public class SkullCmd extends CustomCommand {
         // Add MHF button
         VexelCoreBukkitAPI.getCacheManager().getCachedPlayer("MHF_Cake").thenAccept(p -> {
             menu.addButton(20, new MenuButton(p.getPlayerSkinData().getTexture())
-                    .name("&d&lMarc's Head Format")
-                    .addLore("&aDecorations for map makers by Marc Watson from 2014", "&7" + MojangUtils.MHFHeads().size() + " heads")
+                    .name("&f&lMarc's Head Format")
+                    .addLore("&7Decorations for map makers by Marc Watson from 2014", "&7" + MojangUtils.MHFHeads().size() + " heads")
+                    .addLore("","&7➤ &f&nClick to view heads")
                     .click(e -> {
                         Menu mhf = openMHF();
                         // Set previous menu before opening
@@ -92,9 +92,11 @@ public class SkullCmd extends CustomCommand {
         });
 
         // Add online players button
+        int onlineAmount = Bukkit.getOnlinePlayers().size();
         menu.addButton(21, new MenuButton(new PlayerSkinData(player))
-                .name("&d&lOnline Players")
-                .addLore("&aHeads of players who are currently on the server", "&7" + Bukkit.getOnlinePlayers().size() + " heads")
+                .name("&f&lOnline Players")
+                .addLore("&7Heads of players who are currently on the server", "&7" + onlineAmount + " head" + (onlineAmount == 1 ? "" : "s"))
+                .addLore("","&7➤ &f&nClick to view heads")
                 .click(e -> {
                     Menu online = openOnline();
                     // Set previous menu before opening
@@ -105,8 +107,9 @@ public class SkullCmd extends CustomCommand {
 
         // Add get by username button
         menu.addButton(23, new MenuButton("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=")
-                .name("&d&lGet By Username")
-                .addLore("&7Obtain player head", "&7Click this then type in chat a Minecraft username")
+                .name("&f&lGet By Username")
+                .addLore("&7Obtain player head")
+                .addLore("","&7➤ &f&nClick and then type a username in chat to retrieve")
                 .click(e -> {
                     ConversationFactory conversationFactory = new ConversationFactory(instance);
                     Conversation c = conversationFactory
@@ -125,8 +128,9 @@ public class SkullCmd extends CustomCommand {
 
         // Add search button
         menu.addButton(24, new MenuButton("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjIyODcyMzQyZDJjZjIwNzU0YjllMWJhZTljMDkwMjkxMmRjYWUxMmU2M2I1MjBiNmZlOGJkOTExYjkxMDE4YiJ9fX0=")
-                .name("&d&lSearch Skull Database")
-                .addLore("&7Click this then type a skull name in chat")
+                .name("&f&lSearch Skull Database")
+                .addLore("&7Search through all heads")
+                .addLore("","&7➤ &f&nClick and then type a term in chat to see results")
                 .click(e -> {
                     ConversationFactory conversationFactory = new ConversationFactory(instance);
                     Conversation c = conversationFactory
@@ -150,7 +154,7 @@ public class SkullCmd extends CustomCommand {
         ArrayList<LibreHead> allHeads = new ArrayList<>(instance.getHeads());
         // Add online players
         Bukkit.getOnlinePlayers().forEach(p -> {
-            allHeads.add(new LibreHead("&d&l"+p.getName(), new SkullBuilder(p).getTexture()).database(LibreHead.DATABASE.ONLINE_PLAYER));
+            allHeads.add(new LibreHead("&f&l"+p.getName(), new SkullBuilder(p).getTexture()).database(LibreHead.DATABASE.ONLINE_PLAYER));
         });
         return allHeads;
     }
@@ -192,9 +196,9 @@ public class SkullCmd extends CustomCommand {
     public static MenuButton getGetterSkull(MenuButton b, String skullName) {
         return b.click(e -> {
             Player player = (Player) e.getWhoClicked();
-            player.getInventory().addItem(b.getCleanItemStack());
+            player.getInventory().addItem(b.getCleanItemStack(new ArrayList<>()));
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, (float) 1, 0);
-            new BukkitMsgBuilder("&7Grabbed &d&l" + skullName).send(player);
+            new BukkitMsgBuilder("&7Grabbed &f&l" + skullName).send(player);
         });
     }
 
@@ -205,9 +209,9 @@ public class SkullCmd extends CustomCommand {
         PaginatedMenu online = new PaginatedMenu(MenuRowSize.SIX, "Online Players");
         Bukkit.getOnlinePlayers().forEach(op -> {
             MenuButton b = new MenuButton(new PlayerSkinData(op))
-                    .name("&d&l" + op.getName())
-                    .addLore("&aPlayer", "&7Online Player");
-            online.addButton(getGetterSkull(b, "&d&l" + op.getName()));
+                    .name("&f&l" + op.getName())
+                    .addLore("&7Player", "&7Online Player");
+            online.addButton(getGetterSkull(b, "&f&l" + op.getName()));
         });
         return online;
     }
@@ -221,9 +225,9 @@ public class SkullCmd extends CustomCommand {
             CompletableFuture<CachedPlayerV2> cpf = VexelCoreBukkitAPI.getCacheManager().getCachedPlayer(un);
             cpf.thenAccept(p -> {
                 MenuButton b = new MenuButton(p.getPlayerSkinData())
-                        .name("&d&l" + un)
-                        .addLore("&aMarc's Head Format", "&7MHF Player");
-                mhfHeads.addButton(getGetterSkull(b, "&d&l" + un));
+                        .name("&f&l" + un)
+                        .addLore("&7Marc's Head Format", "&7MHF Player");
+                mhfHeads.addButton(getGetterSkull(b, "&f&l" + un));
             });
         });
         return mhfHeads;
@@ -234,8 +238,9 @@ public class SkullCmd extends CustomCommand {
      */
     private void addCategory(Menu menu, String skullTexture, LibreHead.CATEGORY category, int size, int slot, Player player) {
         MenuButton b = new MenuButton(skullTexture)
-                .name("&d&l" + category.get().getName())
-                .addLore("&a" + category.get().getDescription(), "&7" + instance.getDF().format(size) + " heads");
+                .name("&f&l" + category.get().getName())
+                .addLore("&7" + category.get().getDescription(), "&7" + instance.getDF().format(size) + " heads")
+                .addLore("","&7➤ &f&nClick to view heads");
 
         // Create click handler for each category
         b.click(e -> {
@@ -281,18 +286,19 @@ public class SkullCmd extends CustomCommand {
      * Add a single head to a menu
      */
     public static void addHeadsToMenu(LibreHead head, Menu menu) {
-        String name = "&r&d&l" + head.getName();
+        String name = "&r&f&l" + head.getName();
         SkullBuilderUtil sbu = new SkullBuilderUtil(head.getValue());
         if (head.hasSignature()) {
             sbu.setSignature(head.getSignature());
         }
         MenuButton b = new MenuButton(sbu.get()).name(name);
         if (head.getCategory() != null) {
-            b.addLore("&a" + head.getCategory().toString());
+            b.addLore("&7" + head.getCategory().toString());
         }
         if (head.getDatabase() != null) {
             b.addLore("&7" + head.getDatabase().toString());
         }
+        b.addLore("","&7➤ &f&nClick to add head to your inventory");
         menu.addButton(getGetterSkull(b, name));
     }
 
