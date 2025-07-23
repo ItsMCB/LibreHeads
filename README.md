@@ -1,14 +1,18 @@
 <p align="center">
   <br/>
-  <a href="https://github.com/ItsMCB/LibreHeads">LibreHeads</a> is a free and open source Minecraft skull database selector designed for <a href="https://libregalaxy.org/play">Libre Galaxy Games</a>.
+  <a href="https://github.com/ItsMCB/LibreHeads">LibreHeads</a> is a free and open-source Minecraft skull database selector designed for <a href="https://libregalaxy.org/play">Libre Galaxy Games</a>.
   <br/>
 </p>
 
 
 ## Install
 
-This plugin uses data generously made available by https://minecraft-heads.com/.
-In order to use this plugin, you must clone the repository, save JSON data from the API using the download.sh script, and finally build the plugin with Gradle.
+LibreHeads uses data generously made available by https://minecraft-heads.com/.
+As of current, in order to use this plugin, it must be built from source.
+The steps are as follows: clone the repo, use download.sh script to create a save of the Minecraft Heads API data, and build the jar using Gradle.
+
+Note: This process is intentional to avoid potential API problems and respect the data's license.
+
 
 This plugin depends on [VexelCore](https://github.com/ItsMCB/VexelCore). (Drop both plugin jars into your plugins folder.)
 
@@ -29,5 +33,10 @@ Join us on [Discord](https://libregalaxy.org/chat/) to meet other maintainers. W
 
 ## Links
 
-- [License (GNU General Public License v3.0)](LICENSE)
-- [Open Skulls Database](src/main/resources/)
+- Source code is licensed under [GNU General Public License v3.0](LICENSE)
+- Extra heads can be added here: [Open Skulls Database](src/main/resources/)
+
+<br>
+
+To [support](https://minecraft-heads.com/support-us#banners) the Minecraft Heads project, here is their banner. Click to view their website.
+[![Banner of Minecraft Heads](./minecraft-heads-large.png)](https://minecraft-heads.com/)
