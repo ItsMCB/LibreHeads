@@ -2,7 +2,7 @@ name: LibreHeads
 description: The ultimate decorative head database
 version: '${version}'
 main: org.libregalaxy.libreheads.LibreHeads
-api-version: 1.21.3
+api-version: '26.3'
 author: ItsMCB
 libraries:
   - com.fasterxml.jackson.core:jackson-core:2.18.3

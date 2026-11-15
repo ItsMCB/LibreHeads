@@ -18,14 +18,14 @@ public class LibreHead {
         MONSTERS(new HeadCategory("Monsters").description("Aliens, ghosts, and other creatures.")),
         PLANTS(new HeadCategory("Plants").description("Shrubbery, fruit, vegetables, etc."));
 
-        private HeadCategory categorty;
+        private final HeadCategory category;
 
         CATEGORY(HeadCategory category) {
-            this.categorty = category;
+            this.category = category;
         }
 
         public HeadCategory get() {
-            return categorty;
+            return category;
         }
 
         @Override
@@ -39,10 +39,11 @@ public class LibreHead {
         UNKNOWN("Unknown Source"),
         LIBREHEADS("LibreHeads"),
         HEADDATABASE("Head Database"),
+        MHF("Marc's Head Format"),
         PLAYER("Player"),
         ONLINE_PLAYER("Online Player");
 
-        private String database;
+        private final String database;
 
         DATABASE(String database) {
             this.database = database;
@@ -88,6 +89,16 @@ public class LibreHead {
         this.tags = tags;
     }
 
+    public LibreHead signature(String signature) {
+        this.signature = signature;
+        return this;
+    }
+
+    public LibreHead tags(List<String> tags) {
+        this.tags = tags;
+        return this;
+    }
+
     public LibreHead category(CATEGORY category) {
         this.category = category;
         return this;
@@ -111,7 +122,7 @@ public class LibreHead {
     }
 
     public boolean hasSignature() {
-        return signature != null;
+        return signature != null && !signature.isEmpty();
     }
 
     public List<String> getTags() {

@@ -1,8 +1,8 @@
 package org.libregalaxy.libreheads;
 
 public class HeadCategory {
-    String name;
-    String description;
+    private final String name;
+    private String description;
 
     public HeadCategory(String name) {
         this.name = name;
