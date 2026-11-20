@@ -24,7 +24,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.18.3'
 
     // VexelCore
-    compileOnly files('/home/martin/Repos/VexelCore/bukkit/build/libs/VexelCore-Bukkit-1.0.1-SNAPSHOT.jar')
+    compileOnly files('/home/martin/Repos/VexelCore/bukkit/build/libs/VexelCore-Bukkit-2.0.1-SNAPSHOT.jar')
 }
 
 java {
